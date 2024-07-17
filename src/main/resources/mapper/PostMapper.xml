@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wkh.project.mapper.PostMapper">
+
+    <resultMap id="BaseResultMap" type="com.wkh.project.model.entity.Post">
+            <id property="postId" column="post_id" jdbcType="BIGINT"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
+            <result property="userId" column="user_id" jdbcType="BIGINT"/>
+            <result property="created" column="created" jdbcType="TIMESTAMP"/>
+            <result property="lastModified" column="last_modified" jdbcType="TIMESTAMP"/>
+            <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        post_id,title,content,
+        user_id,created,last_modified,
+        is_delete
+    </sql>
+
+    <select id="listPostWithDelete" resultType="com.wkh.project.model.entity.Post">
+        select *
+        from post
+        where last_modified >= #{minUpdateTime}
+    </select>
+</mapper>
