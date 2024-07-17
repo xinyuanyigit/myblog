@@ -1,23 +1,49 @@
-# SpringBoot 项目初始模板
+# myblog项目
 
 > @author wangkehua
 
-## 模板特点
-
-### 主流框架 & 特性
+## 项目介绍
+实现一个包含用户管理（登录、注册、注销、更新、检索、权限管理）和帖子管理（创建、删除、编辑、更新）的系统
+### 使用技术
 
 - Spring Boot 3.3.1
 - Spring MVC
-- MyBatis + MyBatis Plus 数据访问（开启分页）
-- Spring Boot 调试工具和项目处理器
 - Spring AOP 切面编程
 - Spring 事务注解
+- MyBatis + MyBatis Plus 数据访问（开启分页）
 
 ### 数据存储
 
 - MySQL 数据库
 - Redis 内存数据库
+- 表结构
+```sql 
+-- 用户表
+create table if not exists user
+(
+user_id           bigint auto_increment comment 'user_id' primary key,
+username  varchar(256)                           not null comment '用户昵称',
+password varchar(512)                           not null comment '密码',
+email   varchar(1024)                          null comment '用户头像',
+userRole     varchar(256) default 'user'            not null comment '用户角色：user/admin/ban',
+created   datetime     default CURRENT_TIMESTAMP not null comment '创建时间',
+last_modified   datetime     default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+isDelete     tinyint      default 0                 not null comment '是否删除'
+) comment '用户' collate = utf8mb4_unicode_ci;
 
+-- 帖子表
+create table if not exists post
+(
+post_id         bigint auto_increment comment 'post_id' primary key,
+title      varchar(512)                       null comment '标题',
+content    text                               null comment '内容',
+user_id     bigint                             not null comment '创建用户 id',
+created datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+last_modified datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+isDelete   tinyint  default 0                 not null comment '是否删除',
+index idx_userId (user_id)
+) comment '帖子' collate = utf8mb4_unicode_ci;
+```
 ### 工具类
 
 - Hutool 工具库
